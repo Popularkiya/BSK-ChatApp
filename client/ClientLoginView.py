@@ -49,8 +49,7 @@ class ClientLoginView:
         self.usernameField.focus()
         self.pswdField.focus()
 
-        # TODO password is currrently not passed to the function we may change that a bit later 
-        self.loginWindow.bind('<Return>', (lambda event : self.saveUserInput(self.usernameField.get(), self.pswdField.get())))
+        self.loginWindow.bind('<Return>', (lambda event: self.saveUserInput(self.usernameField.get(), self.pswdField.get())))
         self.loginButton = CustomButton(self.loginWindow,
                          text = "Log in",
                          width = 25,

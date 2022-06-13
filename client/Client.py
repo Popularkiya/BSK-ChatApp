@@ -1,7 +1,7 @@
-from tkinter import *
 from client.ClientNetworkController import ClientNetworkController
 from client.ClientChatView import ClientChatView
 from client.ClientLoginView import ClientLoginView
+from client.ClientKeyController import ClientKeyController
 
 
 class Client:
@@ -21,9 +21,11 @@ class Client:
         self.name = name
         self.password = password
 
-        self.controller = ClientNetworkController(self.name)
-        self.chatView = ClientChatView(self.rootWindow, self.name, self.controller)
+        self.keyController = ClientKeyController(self.name, self.password)
+        self.keyController.getKeys()
+        self.controller = ClientNetworkController(self.name, self.keyController)
 
+        self.chatView = ClientChatView(self.rootWindow, self.name, self.controller)
         self.controller.addView(self.chatView)
 
         self.controller.startCommunication()

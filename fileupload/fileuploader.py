@@ -12,7 +12,6 @@ class FileUploader:
         )
 
         self.file = filedialog.askopenfile(
-            title='Open a file',
+            title='Choose a file',
             initialdir='/',
-            mode = 'r',
-            filetypes=filetypes)
+            mode='r')

@@ -26,7 +26,7 @@ class Server:
             thread = threading.Thread(target=self.handleClient, args=(conn, addr))
             thread.start()
             self.clients.append((conn, addr))
-            print("New connection from ", addr)
+            print(f"New connection from {addr}")
 
     def handleClient(self, conn, addr):
         connected = True
@@ -38,13 +38,6 @@ class Server:
             recvFrame = pickle.loads(message)
             size = default_size
             packets = []
-            if recvFrame.type == FrameType.CLOSE:
-                # close the connection
-                conn.close()
-                self.clients.remove((conn, addr))
-                connected = False
-                print(f"Client {addr} disconnected!")
-                break
 
             if recvFrame.type == FrameType.SIZE:
                 size = struct.unpack('I', recvFrame.data)
@@ -60,7 +53,14 @@ class Server:
                         size = size[0]
                     elif recvFrame.type == FrameType.FILE_END:
                         break
-
+            elif recvFrame.type == FrameType.CLOSE:
+                # close the connection
+                conn.shutdown(socket.SHUT_WR)
+                conn.close()
+                self.clients.remove((conn, addr))
+                connected = False
+                print(f"Client {addr}: {recvFrame.user} disconnected!")
+                break
 
             # broadcast message
             self.broadcastMessage(message)
@@ -71,6 +71,7 @@ class Server:
         for client in self.clients:
             client[0].sendall(message)
             # print(f"sending message to client {client[1]}")
+
 
 def startServer(addr, port):
     server = Server(addr, port)

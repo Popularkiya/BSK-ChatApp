@@ -6,7 +6,7 @@ class ClientChatView:
     OPTIONS = [
         "ECB",
         "CBC"
-    ] #etc
+    ]
 
     filepath = ""
 
@@ -66,7 +66,7 @@ class ClientChatView:
         self.messageEntry.focus()
 
         # Send Button
-        self.rootWindow.bind('<Return>', (lambda event : self.sendMessage(self.messageEntry.get())))
+        self.rootWindow.bind('<Return>', (lambda event: self.sendMessage(self.messageEntry.get())))
         self.sendButton = CustomButton(self.bottomLabel,
                                        text="Send",
                                        width=20,
@@ -135,6 +135,7 @@ class ClientChatView:
         self.textCons.see(END)
     
     def sendMessage(self, message):
+        self.controller.cipherMode = self.cipherPicker.get()
         # self.cipherPicker.get() # get the dropdown list value
         # print(self.cipherPicker.get()) # debugging
         self.messageEntry.delete(0, 'end')
